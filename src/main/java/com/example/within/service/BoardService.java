@@ -5,6 +5,7 @@ import com.example.within.dto.BoardRequestDto;
 import com.example.within.dto.BoardResponseDto;
 import com.example.within.entity.Board;
 import com.example.within.entity.StatusCode;
+import com.example.within.entity.User;
 import com.example.within.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,7 @@ public class BoardService {
         Board board = existBoard(boardId);
 
         // 작성자 게시글 체크
-
+//        isBoardUser(user, board);
         board.update(boardRequestDto);
         BasicResponseDto basicResponseDto =
                 new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글 수정 성공!");
@@ -70,6 +71,12 @@ public class BoardService {
                 () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
         );
         return board;
+    }
+
+    private void isBoardUser(User user, Board board){
+        if(!board.getUser().getUsername().equals(user.getUsername())){
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
     }
 
 }
