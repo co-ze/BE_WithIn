@@ -29,7 +29,8 @@ public class BoardService {
         // 유저 아이디 추가
 
         boardRepository.save(board);
-        BasicResponseDto basicResponseDto = new BasicResponseDto(StatusCode.OK.getStatusCode(), "생성 성공!!");
+        BasicResponseDto basicResponseDto =
+                new BasicResponseDto(StatusCode.OK.getStatusCode(), "생성 성공!!");
         return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
 
@@ -44,13 +45,25 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<BoardResponseDto> getBoard(Long boardId) {
+    public ResponseEntity<?> getBoard(Long boardId) {
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
     }
 
+    @Transactional
+    public ResponseEntity<?> update(Long boardId, BoardRequestDto boardRequestDto) {
+        // 게시글 존재여부 확인
+        Board board = existBoard(boardId);
+
+        // 작성자 게시글 체크
+
+        board.update(boardRequestDto);
+        BasicResponseDto basicResponseDto =
+                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글 수정 성공!");
+        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+    }
 
     private Board existBoard(Long boardId){
         Board board = boardRepository.findById(boardId).orElseThrow(

@@ -16,7 +16,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/boards")
-    public ResponseEntity<?> create(@RequestBody BoardRequestDto boardRequestDto){
+    public ResponseEntity<?> createBoard(@RequestBody BoardRequestDto boardRequestDto){
         return boardService.create(boardRequestDto);
     }
 
@@ -26,7 +26,7 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{boardId}")
-    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId){
+    public ResponseEntity<?> getBoard(@PathVariable Long boardId){
         return boardService.getBoard(boardId);
     }
 
