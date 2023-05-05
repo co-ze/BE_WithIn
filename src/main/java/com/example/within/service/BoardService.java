@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +41,22 @@ public class BoardService {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(boardList, HttpStatus.OK);
 
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<BoardResponseDto> getBoard(Long boardId) {
+        // 게시글 존재여부 확인
+        Board board = existBoard(boardId);
+        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
+
+
+    private Board existBoard(Long boardId){
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+        );
+        return board;
     }
 
 }
