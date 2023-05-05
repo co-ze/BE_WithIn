@@ -1,6 +1,7 @@
 package com.example.within.controller;
 
 import com.example.within.Security.UserDetailsImpl;
+import com.example.within.dto.UserPageRequestDto;
 import com.example.within.dto.UserRequestDto;
 import com.example.within.dto.UserResponseDto;
 import com.example.within.service.UserService;
