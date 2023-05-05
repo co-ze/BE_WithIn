@@ -30,4 +30,9 @@ public class BoardController {
         return boardService.getBoard(boardId);
     }
 
+    @PutMapping("/boards/{boardId}")
+    public ResponseEntity<?> updateBoard(@PathVariable Long boardId,
+                                         @RequestBody BoardRequestDto boardRequestDto){
+        return boardService.update(boardId, boardRequestDto);
+    }
 }
