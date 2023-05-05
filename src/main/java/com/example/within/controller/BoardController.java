@@ -1,13 +1,13 @@
 package com.example.within.controller;
 
 import com.example.within.dto.BoardRequestDto;
+import com.example.within.dto.BoardResponseDto;
 import com.example.within.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/within")
@@ -20,4 +20,8 @@ public class BoardController {
         return boardService.create(boardRequestDto);
     }
 
+    @GetMapping("/boards")
+    public ResponseEntity<List<BoardResponseDto>> getBoards() {
+        return boardService.getBoards();
+    }
 }
