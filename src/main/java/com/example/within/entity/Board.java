@@ -1,6 +1,7 @@
 package com.example.within.entity;
 
 import com.example.within.dto.BoardRequestDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Board extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BOARD_ID")
     private Long id;
 
     @Column(nullable = false)
@@ -25,15 +27,27 @@ public class Board extends Timestamped{
     @Lob
     private String image;
 
-//    @ManyToOne
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    @JsonBackReference
+    private User user;
 
     public Board(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();
         this.contents = boardRequestDto.getContents();
         this.category = boardRequestDto.getCategory();
         this.image = boardRequestDto.getImage();
+    }
 
+    public void update(BoardRequestDto boardRequestDto){
+        this.title = boardRequestDto.getTitle();
+        this.contents = boardRequestDto.getContents();
+        this.category = boardRequestDto.getCategory();
+        this.image = boardRequestDto.getImage();
+    }
+
+    public void addUser(User user){
+        this.user = user;
     }
 
 }
