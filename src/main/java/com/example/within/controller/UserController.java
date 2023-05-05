@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/within/")
+@RequestMapping("/within")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -28,8 +28,13 @@ public class UserController {
         return userService.login(userRequestDto, httpServletResponse);
     }
 
-    @GetMapping("/memebers")
-    public List<UserResponseDto> getMemberList(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.getMemberList(userDetails.getUser());
+    @GetMapping("/members")
+    public List<UserResponseDto> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.getUserList(userDetails.getUser());
+    }
+
+    @GetMapping("/members/{userId}")
+    public ResponseEntity<?> getUserInfo(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.getUserInfo(userId, userDetails.getUser());
     }
 }

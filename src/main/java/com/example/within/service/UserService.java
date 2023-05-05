@@ -1,5 +1,6 @@
 package com.example.within.service;
 
+import com.example.within.dto.UserStatusResponseDto;
 import com.example.within.dto.UserRequestDto;
 import com.example.within.dto.UserResponseDto;
 import com.example.within.entity.User;
@@ -11,7 +12,6 @@ import com.example.within.repository.UserRepository;
 import com.example.within.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class UserService {
         }
         User users = new User(email, password, userRoleEnum);
         userRepository.save(users);
-        return ResponseEntity.ok(new StatusResponseDto("회원가입 성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new UserStatusResponseDto(users.getUsername(), "로그인 성공"));
     }
 
     @Transactional
@@ -66,11 +66,16 @@ public class UserService {
         String token = jwtUtil.createToken(users.getEmail(), users.getRole());
         httpServletResponse.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
-        return ResponseEntity.ok(new StatusResponseDto("로그인 성공", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new UserStatusResponseDto(users.getUsername(), "로그인 성공"));
     }
 
     @Transactional(readOnly = true)
-    public List<UserResponseDto> getMemberList(User users){
-        return userRepository.selectAllMember();
+    public List<UserResponseDto> getUserList(User users){
+        return userRepository.selectAllUser();
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getUserInfo(Long userId, User users){
+        return ResponseEntity.ok(userRepository.selectUser(userId));
     }
 }
