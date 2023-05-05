@@ -35,4 +35,9 @@ public class BoardController {
                                          @RequestBody BoardRequestDto boardRequestDto){
         return boardService.update(boardId, boardRequestDto);
     }
+
+    @DeleteMapping("/boards/{boardId}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardId){
+        return boardService.delete(boardId);
+    }
 }

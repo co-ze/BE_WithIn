@@ -28,6 +28,7 @@ public class BoardService {
         Board board = new Board(boardRequestDto);
 
         // 유저 아이디 추가
+//        board.addUser(user);
 
         boardRepository.save(board);
         BasicResponseDto basicResponseDto =
@@ -63,6 +64,19 @@ public class BoardService {
         board.update(boardRequestDto);
         BasicResponseDto basicResponseDto =
                 new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글 수정 성공!");
+        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> delete(Long boardId) {
+        // 게시글 존재여부 확인
+        Board board = existBoard(boardId);
+
+        // 작성자 게시글 체크
+//        isBoardUser(user, board);
+
+        boardRepository.deleteById(boardId);
+        BasicResponseDto basicResponseDto =
+                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글 삭제 성공!");
         return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
 
