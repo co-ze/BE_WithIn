@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class BoardService {
     private final BoardRepository boardRepository;
 
+    @Transactional
     public ResponseEntity<?> create(BoardRequestDto boardRequestDto) {
         Board board = new Board(boardRequestDto);
 
