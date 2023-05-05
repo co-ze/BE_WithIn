@@ -32,4 +32,9 @@ public class UserController {
     public List<UserResponseDto> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.getUserList(userDetails.getUser());
     }
+
+    @GetMapping("/members/{userId}")
+    public ResponseEntity<?> getUserInfo(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.getUserInfo(userId, userDetails.getUser());
+    }
 }
