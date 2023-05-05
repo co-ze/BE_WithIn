@@ -7,6 +7,7 @@ import com.example.within.entity.Board;
 import com.example.within.entity.StatusCode;
 import com.example.within.entity.User;
 import com.example.within.repository.BoardRepository;
+import com.example.within.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +23,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ResponseEntity<?> create(BoardRequestDto boardRequestDto) {
         Board board = new Board(boardRequestDto);
 
         // 유저 아이디 추가
-//        board.addUser(user);
+        board.addUser(user);
 
         boardRepository.save(board);
         BasicResponseDto basicResponseDto =
@@ -37,7 +39,8 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<List<BoardResponseDto>> getBoards() {
+    public ResponseEntity<List<BoardResponseDto>> getBoards(User user) {
+        existUser(user.getUsername());
         List<BoardResponseDto> boardList = boardRepository.findAll().stream()
                 .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
                 .map(BoardResponseDto::new)
@@ -60,7 +63,7 @@ public class BoardService {
         Board board = existBoard(boardId);
 
         // 작성자 게시글 체크
-//        isBoardUser(user, board);
+        isBoardUser(user, board);
         board.update(boardRequestDto);
         BasicResponseDto basicResponseDto =
                 new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글 수정 성공!");
@@ -72,8 +75,7 @@ public class BoardService {
         Board board = existBoard(boardId);
 
         // 작성자 게시글 체크
-//        isBoardUser(user, board);
-
+        isBoardUser(user, board);
         boardRepository.deleteById(boardId);
         BasicResponseDto basicResponseDto =
                 new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글 삭제 성공!");
@@ -91,6 +93,13 @@ public class BoardService {
         if(!board.getUser().getUsername().equals(user.getUsername())){
             throw new IllegalArgumentException("권한이 없습니다.");
         }
+    }
+
+    public User existUser(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new NoSuchElementException("사용자가 없습니다.")
+        );
+        return user;
     }
 
 }

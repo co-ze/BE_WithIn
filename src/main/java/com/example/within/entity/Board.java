@@ -1,6 +1,7 @@
 package com.example.within.entity;
 
 import com.example.within.dto.BoardRequestDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Board extends Timestamped{
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
+    @JsonBackReference
     private User user;
 
     public Board(BoardRequestDto boardRequestDto){
