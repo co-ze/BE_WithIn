@@ -28,8 +28,8 @@ public class UserController {
         return userService.login(userRequestDto, httpServletResponse);
     }
 
-    @GetMapping("/memebers")
-    public List<UserResponseDto> getMemberList(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.getMemberList(userDetails.getUser());
+    @GetMapping("/members")
+    public List<UserResponseDto> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.getUserList(userDetails.getUser());
     }
 }
