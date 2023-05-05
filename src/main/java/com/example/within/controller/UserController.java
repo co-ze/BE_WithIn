@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/within/")
+@RequestMapping("/within")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
