@@ -1,5 +1,6 @@
 package com.example.within.service;
 
+import com.example.within.dto.UserPageRequestDto;
 import com.example.within.dto.UserStatusResponseDto;
 import com.example.within.dto.UserRequestDto;
 import com.example.within.dto.UserResponseDto;
@@ -31,6 +32,7 @@ public class UserService {
 
     @Transactional
     public ResponseEntity<?> signUp(UserRequestDto userRequestDto) {
+        String username = userRequestDto.getUsername();
         String email = userRequestDto.getEmail();
         String password = passwordEncoder.encode(userRequestDto.getPassword());
 
@@ -45,9 +47,9 @@ public class UserService {
             }
             userRoleEnum = UserRoleEnum.ADMIN;
         }
-        User users = new User(email, password, userRoleEnum);
+        User users = new User(username, email, password, userRoleEnum);
         userRepository.save(users);
-        return ResponseEntity.ok(new UserStatusResponseDto(users.getUsername(), "로그인 성공"));
+        return ResponseEntity.ok(new UserStatusResponseDto(users.getUsername(), "회원가입 성공"));
     }
 
     @Transactional
@@ -76,6 +78,13 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getUserInfo(Long userId, User users){
+        return ResponseEntity.ok(userRepository.selectUser(userId));
+    }
+
+    @Transactional
+    public ResponseEntity<?> updateUserInfo(Long userId, UserPageRequestDto userPageRequestDto, User users){
+
+
         return ResponseEntity.ok(userRepository.selectUser(userId));
     }
 }

@@ -38,4 +38,9 @@ public class UserController {
     public ResponseEntity<?> getUserInfo(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.getUserInfo(userId, userDetails.getUser());
     }
+
+    @PutMapping("/members/{userId}")
+    public ResponseEntity<?> updateUserInfo(@PathVariable Long userId, @RequestBody UserPageRequestDto userPageRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.updateUserInfo(userId, userPageRequestDto, userDetails.getUser());
+    }
 }
