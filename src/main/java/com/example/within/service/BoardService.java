@@ -26,7 +26,7 @@ public class BoardService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ResponseEntity<?> create(BoardRequestDto boardRequestDto) {
+    public ResponseEntity<?> create(BoardRequestDto boardRequestDto, User user) {
         Board board = new Board(boardRequestDto);
 
         // 유저 아이디 추가
@@ -50,7 +50,8 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getBoard(Long boardId) {
+    public ResponseEntity<?> getBoard(Long boardId, User user) {
+        existUser(user.getUsername());
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
@@ -58,7 +59,7 @@ public class BoardService {
     }
 
     @Transactional
-    public ResponseEntity<?> update(Long boardId, BoardRequestDto boardRequestDto) {
+    public ResponseEntity<?> update(Long boardId, BoardRequestDto boardRequestDto, User user) {
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
 
@@ -70,7 +71,7 @@ public class BoardService {
         return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> delete(Long boardId) {
+    public ResponseEntity<?> delete(Long boardId, User user) {
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
 

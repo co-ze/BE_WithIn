@@ -6,6 +6,7 @@ import com.example.within.dto.BoardResponseDto;
 import com.example.within.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +18,9 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/boards")
-    public ResponseEntity<?> createBoard(@RequestBody BoardRequestDto boardRequestDto){
-        return boardService.create(boardRequestDto);
+    public ResponseEntity<?> createBoard(@RequestBody BoardRequestDto boardRequestDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return boardService.create(boardRequestDto, userDetails.getUser());
     }
 
     @GetMapping("/boards")
