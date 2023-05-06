@@ -19,7 +19,7 @@ public class CommentController {
     public ResponseEntity<?> createComment(@PathVariable Long boardId,
                                            @RequestBody CommentRequestDto requestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
-    return commentService.createComment(boardId,requestDto,userDetails.getUser());
+        return commentService.createComment(boardId,requestDto,userDetails.getUser());
     }
 
     @PutMapping("/{boardId}/comments/{commentId}")
@@ -41,4 +41,5 @@ public class CommentController {
     public ResponseEntity<?> selectEmotion(@PathVariable Long boardId, @PathVariable Long commentId, @PathVariable EmotionEnum emotion, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.SelectEmotion(boardId, commentId, emotion, userDetails.getUser());
     }
+
 }

@@ -11,6 +11,9 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -35,7 +38,7 @@ public class Board extends Timestamped{
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    @JsonBackReference
+//    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
@@ -53,7 +56,6 @@ public class Board extends Timestamped{
 
     @Column
     private Long congratulationCnt;
-
 
     public Board(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();

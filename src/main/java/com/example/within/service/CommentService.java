@@ -20,6 +20,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
     private final EmotionRepository emotionRepository;
+    private final UserRepository userRepository;
+
 
     @Transactional
     public ResponseEntity<?> createComment(Long boardId, CommentRequestDto requestDto, User user) {
