@@ -10,6 +10,8 @@ import com.example.within.repository.BoardRepository;
 import com.example.within.repository.EmotionRepository;
 import com.example.within.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -43,12 +45,9 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<List<BoardResponseDto>> getBoards(User user) {
+    public ResponseEntity<Page<Board>> getBoards(User user, Pageable pageable) {
         existUser(user.getEmail());
-        List<BoardResponseDto> boardList = boardRepository.findAll().stream()
-                .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
-                .map(BoardResponseDto::new)
-                .collect(Collectors.toList());
+        Page<Board> boardList = boardRepository.findAll(pageable);
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
@@ -99,12 +98,6 @@ public class BoardService {
         }
     }
 
-    private void isUserAdmin(User user){
-        if(!user.getRole().equals(UserRoleEnum.ADMIN)) {
-            throw new ErrorException(ExceptionEnum.NOT_AUTHORIZATION);
-        }
-    }
-
     private void isBoardUser(User user, Board board){
         if(!board.getUser().getEmail().equals(user.getEmail())){
             throw new ErrorException(ExceptionEnum.NOT_ALLOWED);
@@ -120,7 +113,7 @@ public class BoardService {
     @Transactional
     public ResponseEntity<?> SelectEmotion(Long boardId, EmotionEnum emotion, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+                () -> new ErrorException(ExceptionEnum.BOARD_NOT_FOUND)
         );
         Emotion toEmotion = new Emotion(board, null, user, emotion);
         Emotion existingEmotion = emotionRepository.findByBoardIdAndUserIdAndEmotion(boardId, user.getId(), emotion);

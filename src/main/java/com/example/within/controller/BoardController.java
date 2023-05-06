@@ -3,14 +3,18 @@ package com.example.within.controller;
 import com.example.within.Security.UserDetailsImpl;
 import com.example.within.dto.BoardRequestDto;
 import com.example.within.dto.BoardResponseDto;
+import com.example.within.entity.Board;
 import com.example.within.entity.EmotionEnum;
 import com.example.within.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/within")
@@ -25,8 +29,9 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public ResponseEntity<List<BoardResponseDto>> getBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.getBoards(userDetails.getUser());
+    public ResponseEntity<Page<Board>> getBoards(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                 @PageableDefault(size = 3, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
+        return boardService.getBoards(userDetails.getUser(),pageable);
     }
 
     @GetMapping("/boards/{boardId}")
