@@ -1,10 +1,13 @@
 package com.example.within.dto;
 
+import com.example.within.entity.User;
 import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class UserPageResponseDto {
     private String username;
