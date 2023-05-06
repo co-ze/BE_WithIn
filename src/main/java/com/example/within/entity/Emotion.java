@@ -19,6 +19,11 @@ public class Emotion {
     private Board board;
 
     @ManyToOne
+    @JoinColumn(name = "COMMENT_ID")
+    @JsonIgnore
+    private Comment comment;
+
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     @JsonIgnore
     private User user;

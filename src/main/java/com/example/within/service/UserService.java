@@ -46,7 +46,7 @@ public class UserService {
         }
         UserRoleEnum userRoleEnum = UserRoleEnum.USER;
         if (userRequestDto.isAdmin()) {
-            if (!userRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
+            if (!userRequestDto.getAdminKey().equals(ADMIN_TOKEN)) {
                 throw new ErrorException(ExceptionEnum.TOKEN_NOT_FOUND);
             }
             userRoleEnum = UserRoleEnum.ADMIN;

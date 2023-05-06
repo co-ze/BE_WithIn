@@ -28,5 +28,6 @@ public class BoardResponseDto {
         this.likeCnt = board.getLikeCnt();
         this.sadCnt = board.getSadCnt();
         this.congratulationCnt = board.getCongratulationCnt();
+        this.comment = board.getCommentList().stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 }

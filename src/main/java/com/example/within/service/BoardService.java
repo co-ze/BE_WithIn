@@ -4,6 +4,8 @@ import com.example.within.dto.BasicResponseDto;
 import com.example.within.dto.BoardRequestDto;
 import com.example.within.dto.BoardResponseDto;
 import com.example.within.entity.*;
+import com.example.within.exception.ErrorException;
+import com.example.within.exception.ExceptionEnum;
 import com.example.within.repository.BoardRepository;
 import com.example.within.repository.EmotionRepository;
 import com.example.within.repository.UserRepository;
@@ -22,13 +24,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final EmotionRepository emotionRepository;
     private final UserRepository userRepository;
     private final EmotionRepository emotionRepository;
 
     @Transactional
     public ResponseEntity<?> create(BoardRequestDto boardRequestDto, User user) {
         Board board = new Board(boardRequestDto);
+
+        //ADMIN 확인
+        isUserAdmin(user);
 
         // 유저 아이디 추가
         board.addUser(user);
@@ -41,18 +45,17 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<List<BoardResponseDto>> getBoards(User user) {
-        existUser(user.getUsername());
+        existUser(user.getEmail());
         List<BoardResponseDto> boardList = boardRepository.findAll().stream()
                 .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
                 .map(BoardResponseDto::new)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(boardList, HttpStatus.OK);
-
     }
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getBoard(Long boardId, User user) {
-        existUser(user.getUsername());
+        existUser(user.getEmail());
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
@@ -91,9 +94,15 @@ public class BoardService {
         );
     }
 
+    private void isUserAdmin(User user){
+        if(!user.getRole().equals(UserRoleEnum.ADMIN)) {
+            throw new ErrorException(ExceptionEnum.NOT_ALLOWED);
+        }
+    }
+
     private void isBoardUser(User user, Board board){
-        if(!board.getUser().getUsername().equals(user.getUsername())){
-            throw new IllegalArgumentException("권한이 없습니다.");
+        if(!board.getUser().getEmail().equals(user.getEmail())){
+            throw new ErrorException(ExceptionEnum.NOT_ALLOWED);
         }
     }
 
@@ -103,12 +112,13 @@ public class BoardService {
         );
     }
 
-public ResponseEntity<?> SelectEmotion(Long boardId, EmotionEnum emotion, User user) {
-    Board board = boardRepository.findById(boardId).orElseThrow(
-            () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
-    );
-    Emotion toEmotion = new Emotion(board, user, emotion);
-    Emotion existingEmotion = emotionRepository.findByBoardIdAndUserIdAndEmotion(boardId, user.getId(), emotion);
+    @Transactional
+    public ResponseEntity<?> SelectEmotion(Long boardId, EmotionEnum emotion, User user) {
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+        );
+        Emotion toEmotion = new Emotion(board, null, user, emotion);
+        Emotion existingEmotion = emotionRepository.findByBoardIdAndUserIdAndEmotion(boardId, user.getId(), emotion);
 
         BasicResponseDto basicResponseDto;
         String message;
