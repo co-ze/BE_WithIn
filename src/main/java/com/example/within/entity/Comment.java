@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Comment {
+public class Comment extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMMENT_ID")
