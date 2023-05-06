@@ -27,8 +27,9 @@ public class Emotion {
     @Enumerated(value = EnumType.STRING)
     private EmotionEnum emotion;
 
-    public Emotion(Board board, User user, EmotionEnum emotion) {
+    public Emotion(Board board, Comment comment, User user, EmotionEnum emotion) {
         this.board = board;
+        this.comment = comment;
         this.user = user;
         this.emotion = emotion;
     }

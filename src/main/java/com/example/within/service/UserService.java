@@ -6,6 +6,7 @@ import com.example.within.entity.UserRoleEnum;
 import com.example.within.exception.ErrorException;
 import com.example.within.exception.ErrorResponseDto;
 import com.example.within.exception.ExceptionEnum;
+import com.example.within.repository.EmotionRepository;
 import com.example.within.repository.UserRepository;
 import com.example.within.util.FileUploadUtil;
 import com.example.within.util.JwtUtil;

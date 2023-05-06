@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class BoardResponseDto {
@@ -16,6 +18,7 @@ public class BoardResponseDto {
     private final Long likeCnt;
     private final Long sadCnt;
     private final Long congratulationCnt;
+    private List<CommentResponseDto> comment;
 
     public BoardResponseDto(Board board){
         this.boardId = board.getId();

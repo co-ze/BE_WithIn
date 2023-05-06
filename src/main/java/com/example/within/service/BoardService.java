@@ -24,6 +24,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final EmotionRepository emotionRepository;
     private final UserRepository userRepository;
+    private final EmotionRepository emotionRepository;
 
     @Transactional
     public ResponseEntity<?> create(BoardRequestDto boardRequestDto, User user) {
@@ -71,6 +72,7 @@ public class BoardService {
         return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> delete(Long boardId, User user) {
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
@@ -84,10 +86,9 @@ public class BoardService {
     }
 
     private Board existBoard(Long boardId){
-        Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+        return boardRepository.findById(boardId).orElseThrow(
+                () -> new ErrorException(ExceptionEnum.BOARD_NOT_FOUND)
         );
-        return board;
     }
 
     private void isBoardUser(User user, Board board){
@@ -96,11 +97,10 @@ public class BoardService {
         }
     }
 
-    public User existUser(String username){
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new NoSuchElementException("사용자가 없습니다.")
+    public void existUser(String email){
+        userRepository.findByEmail(email).orElseThrow(
+                () -> new ErrorException(ExceptionEnum.USER_NOT_FOUND)
         );
-        return user;
     }
 
 public ResponseEntity<?> SelectEmotion(Long boardId, EmotionEnum emotion, User user) {
@@ -110,33 +110,31 @@ public ResponseEntity<?> SelectEmotion(Long boardId, EmotionEnum emotion, User u
     Emotion toEmotion = new Emotion(board, user, emotion);
     Emotion existingEmotion = emotionRepository.findByBoardIdAndUserIdAndEmotion(boardId, user.getId(), emotion);
 
-    BasicResponseDto basicResponseDto;
-    String message;
-    long emotionCnt;
+        BasicResponseDto basicResponseDto;
+        String message;
+        long emotionCnt;
 
-    if (existingEmotion != null) {
-        emotionRepository.delete(existingEmotion);
-        message = getEmotionString(emotion) + " 취소";
-        emotionCnt = emotionRepository.findAllCntEachEmotion(boardId, emotion);
-    } else {
-        emotionRepository.save(toEmotion);
-        message = getEmotionString(emotion) + " 등록";
-        emotionCnt = emotionRepository.findAllCntEachEmotion(boardId, emotion);
-    }
-
-    switch (emotion) {
-        case LIKE -> board.setLikeCnt(emotionCnt);
-        case SAD -> board.setSadCnt(emotionCnt);
-        case CONGRATULATION -> board.setCongratulationCnt(emotionCnt);
-        default -> {
+        if (existingEmotion != null) {
+            emotionRepository.delete(existingEmotion);
+            message = getEmotionString(emotion) + " 취소";
+        } else {
+            emotionRepository.save(toEmotion);
+            message = getEmotionString(emotion) + " 등록";
         }
+        emotionCnt = emotionRepository.findAllBoardCntEachEmotion(boardId, emotion);
+
+        switch (emotion) {
+            case LIKE -> board.setLikeCnt(emotionCnt);
+            case SAD -> board.setSadCnt(emotionCnt);
+            case CONGRATULATION -> board.setCongratulationCnt(emotionCnt);
+            default -> throw new IllegalStateException("Unexpected value: " + emotion);
+        }
+
+        boardRepository.save(board);
+
+        basicResponseDto = new BasicResponseDto(StatusCode.OK.getStatusCode(), message);
+        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
-
-    boardRepository.save(board);
-
-    basicResponseDto = new BasicResponseDto(StatusCode.OK.getStatusCode(), message);
-    return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
-}
 
     private String getEmotionString(EmotionEnum emotion) {
         return switch (emotion) {
