@@ -5,9 +5,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
+@Setter
 @NoArgsConstructor
 public class Comment extends Timestamped{
     @Id
@@ -27,6 +32,18 @@ public class Comment extends Timestamped{
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Emotion> toEmotionList = new ArrayList<>();
+
+    @Column
+    private Long likeCnt;
+
+    @Column
+    private Long sadCnt;
+
+    @Column
+    private Long congratulationCnt;
+
     public Comment(CommentRequestDto commentRequestDto){
         this.comment = commentRequestDto.getComment();
     }
@@ -42,4 +59,5 @@ public class Comment extends Timestamped{
     public void update(CommentRequestDto commentRequestDto) {
         this.comment = commentRequestDto.getComment();
     }
+
 }
