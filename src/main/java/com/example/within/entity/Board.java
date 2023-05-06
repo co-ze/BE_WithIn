@@ -2,9 +2,13 @@ package com.example.within.entity;
 
 import com.example.within.dto.BoardRequestDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,8 +33,12 @@ public class Board extends Timestamped{
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    @JsonBackReference
+//    @JsonBackReference
     private User user;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Comment> commentList = new ArrayList<>();
 
     public Board(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();
