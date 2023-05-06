@@ -2,6 +2,7 @@ package com.example.within.controller;
 
 import com.example.within.Security.UserDetailsImpl;
 import com.example.within.dto.CommentRequestDto;
+import com.example.within.entity.EmotionEnum;
 import com.example.within.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,4 +36,10 @@ public class CommentController {
                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
         return commentService.deleteComment(boardId,commentId,userDetails.getUser());
     }
+
+    @PostMapping("/{boardId}/comments/{commentId}/{emotion}")
+    public ResponseEntity<?> selectEmotion(@PathVariable Long boardId, @PathVariable Long commentId, @PathVariable EmotionEnum emotion, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.SelectEmotion(boardId, commentId, emotion, userDetails.getUser());
+    }
+
 }

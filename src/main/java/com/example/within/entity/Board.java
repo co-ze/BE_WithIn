@@ -6,12 +6,17 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Board extends Timestamped{
     @Id
@@ -39,6 +44,18 @@ public class Board extends Timestamped{
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Emotion> toEmotionList = new ArrayList<>();
+
+    @Column
+    private Long likeCnt;
+
+    @Column
+    private Long sadCnt;
+
+    @Column
+    private Long congratulationCnt;
 
     public Board(BoardRequestDto boardRequestDto){
         this.title = boardRequestDto.getTitle();

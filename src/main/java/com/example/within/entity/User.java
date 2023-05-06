@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "Users")
 public class User {
@@ -22,7 +25,7 @@ public class User {
 
     @Column
     @Lob
-    private String img;
+    private String img = "C:/Users/82109/study/BE_WithIn/src/main/resources/images/8326a7a4d1178e43e7ea66aa4e.jpg";
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -38,10 +41,14 @@ public class User {
     @JsonManagedReference
     private List<Board> board;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Emotion> toEmotionList = new ArrayList<>();
+
     public User(String username, String email, String password, UserRoleEnum role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
     }
+
 }

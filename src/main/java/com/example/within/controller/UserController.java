@@ -4,13 +4,16 @@ import com.example.within.Security.UserDetailsImpl;
 import com.example.within.dto.UserPageRequestDto;
 import com.example.within.dto.UserRequestDto;
 import com.example.within.dto.UserResponseDto;
+import com.example.within.entity.User;
 import com.example.within.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -40,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/members/{userId}")
-    public ResponseEntity<?> updateUserInfo(@PathVariable Long userId, @RequestBody UserPageRequestDto userPageRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.updateUserInfo(userId, userPageRequestDto, userDetails.getUser());
+    public ResponseEntity<?> updateUserInfo(@PathVariable Long userId, @RequestBody UserPageRequestDto userPageRequestDto, @RequestParam("imageFile") MultipartFile imageFile, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+         return userService.updateUserInfo(userId, userPageRequestDto, userDetails.getUser(), imageFile);
     }
 }
