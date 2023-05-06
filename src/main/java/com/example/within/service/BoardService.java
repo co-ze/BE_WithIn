@@ -6,6 +6,9 @@ import com.example.within.dto.BoardResponseDto;
 import com.example.within.entity.Board;
 import com.example.within.entity.StatusCode;
 import com.example.within.entity.User;
+import com.example.within.entity.UserRoleEnum;
+import com.example.within.exception.ErrorException;
+import com.example.within.exception.ExceptionEnum;
 import com.example.within.repository.BoardRepository;
 import com.example.within.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,9 @@ public class BoardService {
     public ResponseEntity<?> create(BoardRequestDto boardRequestDto, User user) {
         Board board = new Board(boardRequestDto);
 
+        //ADMIN 확인
+        isUserAdmin(user);
+
         // 유저 아이디 추가
         board.addUser(user);
 
@@ -45,7 +51,6 @@ public class BoardService {
                 .map(BoardResponseDto::new)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(boardList, HttpStatus.OK);
-
     }
 
     @Transactional(readOnly = true)
@@ -84,20 +89,26 @@ public class BoardService {
 
     private Board existBoard(Long boardId){
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+                () -> new ErrorException(ExceptionEnum.BOARD_NOT_FOUND)
         );
         return board;
     }
 
+    private void isUserAdmin(User user){
+        if(!user.getRole().equals(UserRoleEnum.ADMIN)) {
+            throw new ErrorException(ExceptionEnum.NOT_AUTHORIZATION);
+        }
+    }
+
     private void isBoardUser(User user, Board board){
         if(!board.getUser().getEmail().equals(user.getEmail())){
-            throw new IllegalArgumentException("권한이 없습니다.");
+            throw new ErrorException(ExceptionEnum.NOT_AUTHORIZATION);
         }
     }
 
     public User existUser(String email){
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NoSuchElementException("사용자가 없습니다.")
+                () -> new ErrorException(ExceptionEnum.USER_NOT_FOUND)
         );
         return user;
     }
