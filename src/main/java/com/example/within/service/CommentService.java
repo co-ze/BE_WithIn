@@ -38,6 +38,32 @@ public class CommentService {
         return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
 
+    @Transactional
+    public ResponseEntity<?> updateComment(Long boardId, Long commentId, CommentRequestDto commentRequestDto, User user) {
+        Board board = existBoard(boardId);
+        Comment comment = existComment(commentId);
+
+        isCommentUser(user, comment);
+
+        comment.update(commentRequestDto);
+        BasicResponseDto basicResponseDto =
+                new BasicResponseDto(StatusCode.OK.getStatusCode(), "댓글 수정 성공!!");
+        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteComment(Long boardId, Long commentId, User user) {
+        Board board = existBoard(boardId);
+        Comment comment = existComment(commentId);
+
+        isCommentUser(user,comment);
+
+        commentRepository.deleteById(commentId);
+        BasicResponseDto basicResponseDto =
+                new BasicResponseDto(StatusCode.OK.getStatusCode(), "댓글 삭제 성공!");
+        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+    }
+
     private Board existBoard(Long boardId){
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
@@ -57,12 +83,11 @@ public class CommentService {
         }
     }
 
-    public User existUser(String email){
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NoSuchElementException("사용자가 없습니다.")
+    private Comment existComment(Long id){
+        Comment comment = commentRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("댓글이 존재하지 않습니다.")
         );
-        return user;
+        return comment;
     }
-
 
 }
