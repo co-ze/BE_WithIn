@@ -40,7 +40,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<List<BoardResponseDto>> getBoards(User user) {
-        existUser(user.getUsername());
+        existUser(user.getEmail());
         List<BoardResponseDto> boardList = boardRepository.findAll().stream()
                 .sorted(Comparator.comparing(Board::getCreatedAt).reversed())
                 .map(BoardResponseDto::new)
@@ -51,7 +51,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getBoard(Long boardId, User user) {
-        existUser(user.getUsername());
+        existUser(user.getEmail());
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
@@ -91,13 +91,13 @@ public class BoardService {
     }
 
     private void isBoardUser(User user, Board board){
-        if(!board.getUser().getUsername().equals(user.getUsername())){
+        if(!board.getUser().getEmail().equals(user.getEmail())){
             throw new IllegalArgumentException("권한이 없습니다.");
         }
     }
 
-    public User existUser(String username){
-        User user = userRepository.findByUsername(username).orElseThrow(
+    public User existUser(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NoSuchElementException("사용자가 없습니다.")
         );
         return user;

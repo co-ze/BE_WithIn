@@ -17,5 +17,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select new com.example.within.dto.UserPageResponseDto(u.username, u.email, u.img) from User u where u.id = :userId")
     UserResponseDto selectUser(@Param("userId") Long userId);
 
-    Optional<User> findByUsername(String username);
 }
