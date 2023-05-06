@@ -88,6 +88,7 @@ public class UserService {
 
         if (StringUtils.pathEquals(users.getEmail(), userNow.getEmail())) {
             Optional<UserPageResponseDto> optionalUser = userRepository.selectUser(userId);
+//            UserRoleEnum userRoleEnum = users.getRole();
             if (optionalUser.isPresent()) {
                 return ResponseEntity.ok(optionalUser);
             } else {

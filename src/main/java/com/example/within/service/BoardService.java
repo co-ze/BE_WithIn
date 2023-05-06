@@ -35,7 +35,7 @@ public class BoardService {
 
         boardRepository.save(board);
         BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "생성 성공!!");
+                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글을 작성하였습니다.");
         return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
 
@@ -68,7 +68,7 @@ public class BoardService {
         isBoardUser(user, board);
         board.update(boardRequestDto);
         BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글 수정 성공!");
+                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글을 수정하였습니다.");
         return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
 
@@ -81,7 +81,7 @@ public class BoardService {
         isBoardUser(user, board);
         boardRepository.deleteById(boardId);
         BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글 삭제 성공!");
+                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글을 삭제하였습니다.");
         return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
     }
 

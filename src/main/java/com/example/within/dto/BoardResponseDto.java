@@ -1,7 +1,6 @@
 package com.example.within.dto;
 
 import com.example.within.entity.Board;
-import jakarta.persistence.Column;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
