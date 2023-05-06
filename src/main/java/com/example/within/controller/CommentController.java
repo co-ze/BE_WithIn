@@ -21,4 +21,18 @@ public class CommentController {
         return commentService.createComment(boardId,requestDto,userDetails.getUser());
     }
 
+    @PutMapping("/{boardId}/comments/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable Long boardId, @PathVariable Long commentId,
+                                           @RequestBody CommentRequestDto commentRequestDto,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.updateComment(boardId,commentId,commentRequestDto,userDetails.getUser());
+    }
+
+
+    @DeleteMapping("/{boardId}/comments/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long boardId,
+                                           @PathVariable Long commentId,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return commentService.deleteComment(boardId,commentId,userDetails.getUser());
+    }
 }
