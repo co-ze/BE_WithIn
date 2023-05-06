@@ -1,6 +1,5 @@
 package com.example.within.entity;
 
-import com.example.within.dto.UserRequestDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
