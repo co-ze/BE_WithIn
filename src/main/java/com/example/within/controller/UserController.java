@@ -1,6 +1,7 @@
 package com.example.within.controller;
 
 import com.example.within.Security.UserDetailsImpl;
+import com.example.within.dto.UserPageRequestDto;
 import com.example.within.dto.UserRequestDto;
 import com.example.within.dto.UserResponseDto;
 import com.example.within.service.UserService;
@@ -36,5 +37,10 @@ public class UserController {
     @GetMapping("/members/{userId}")
     public ResponseEntity<?> getUserInfo(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.getUserInfo(userId, userDetails.getUser());
+    }
+
+    @PutMapping("/members/{userId}")
+    public ResponseEntity<?> updateUserInfo(@PathVariable Long userId, @RequestBody UserPageRequestDto userPageRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.updateUserInfo(userId, userPageRequestDto, userDetails.getUser());
     }
 }

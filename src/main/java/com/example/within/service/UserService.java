@@ -1,5 +1,6 @@
 package com.example.within.service;
 
+import com.example.within.dto.UserPageRequestDto;
 import com.example.within.dto.UserStatusResponseDto;
 import com.example.within.dto.UserRequestDto;
 import com.example.within.dto.UserResponseDto;
@@ -77,6 +78,13 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getUserInfo(Long userId, User users){
+        return ResponseEntity.ok(userRepository.selectUser(userId));
+    }
+
+    @Transactional
+    public ResponseEntity<?> updateUserInfo(Long userId, UserPageRequestDto userPageRequestDto, User users){
+
+
         return ResponseEntity.ok(userRepository.selectUser(userId));
     }
 }
