@@ -10,6 +10,7 @@ import com.example.within.exception.ErrorException;
 import com.example.within.exception.ErrorResponseDto;
 import com.example.within.exception.ExceptionEnum;
 import com.example.within.repository.UserRepository;
+import com.example.within.util.FileUploadUtil;
 import com.example.within.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,8 +82,21 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getUserInfo(Long userId, User users){
-        return ResponseEntity.ok(userRepository.selectUser(userId));
+    public ResponseEntity<?> getUserInfo(Long userId, User users) {
+        User userNow = userRepository.findById(userId).orElseThrow(
+                () -> new ErrorException(ExceptionEnum.USER_NOT_FOUND)
+        );
+
+        if (StringUtils.pathEquals(users.getEmail(), userNow.getEmail())) {
+            Optional<UserPageResponseDto> optionalUser = userRepository.selectUser(userId);
+            if (optionalUser.isPresent()) {
+                return ResponseEntity.ok(optionalUser);
+            } else {
+                throw new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
+            }
+        } else {
+            throw new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
+        }
     }
 
     @Transactional

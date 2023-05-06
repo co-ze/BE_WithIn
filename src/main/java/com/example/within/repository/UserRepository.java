@@ -1,5 +1,6 @@
 package com.example.within.repository;
 
+import com.example.within.dto.UserPageResponseDto;
 import com.example.within.dto.UserResponseDto;
 import com.example.within.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserResponseDto> selectAllUser();
 
     @Query("select new com.example.within.dto.UserPageResponseDto(u.username, u.email, u.img) from User u where u.id = :userId")
-    UserResponseDto selectUser(@Param("userId") Long userId);
+    Optional<UserPageResponseDto> selectUser(@Param("userId") Long userId);
 
     Optional<User> findByUsername(String username);
 }

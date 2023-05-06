@@ -3,6 +3,7 @@ package com.example.within.controller;
 import com.example.within.Security.UserDetailsImpl;
 import com.example.within.dto.BoardRequestDto;
 import com.example.within.dto.BoardResponseDto;
+import com.example.within.entity.EmotionEnum;
 import com.example.within.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +46,10 @@ public class BoardController {
     public ResponseEntity<?> deleteBoard(@PathVariable Long boardId,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails){
         return boardService.delete(boardId, userDetails.getUser());
+    }
+
+    @PostMapping("/boards/{boardId}/{emotion}")
+    public ResponseEntity<?> selectEmotion(@PathVariable Long boardId, @PathVariable EmotionEnum emotion, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return boardService.SelectEmotion(boardId, emotion, userDetails.getUser());
     }
 }
