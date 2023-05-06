@@ -38,7 +38,7 @@ public class Board extends Timestamped{
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-//    @JsonBackReference
+    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
