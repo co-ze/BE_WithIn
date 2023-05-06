@@ -20,5 +20,6 @@ public class BoardResponseDto {
         this.contents =  board.getContents();
         this.createdTime = board.getCreatedAt();
         this.category = board.getCategory();
+        this.comment = board.getCommentList().stream().map(CommentResponseDto::new).collect(Collectors.toList());
     }
 }
