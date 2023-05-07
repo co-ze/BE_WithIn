@@ -20,7 +20,17 @@ spring:
   thymeleaf:
     cache: false
 
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    password: withinbest
 
 jwt:
   secret:
-    key: 7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
+    key: ENC(XrlocOAEi5gbjlTI3IEGWD/c7WcPvWnATDXVh3T5echxbUGUl2TvOyf2KDzvlKBotMXKS1IxIKBwOZ+5SgllaE4mnmrA2Iakfp4+ABhALqNzBigTzAZ7zJ9OHV3dOAxbgiS2jM9YXYFX6JtBpEW7mft7C6xBKnFfvi61uBca+MM=)
+
+
+    #7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
+
+
+

@@ -38,7 +38,17 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 }
+
+//bootRun {
+//    args = ["--jasypt.encryptor.encryptKey=testkey"]
+//}
+//
+//test {
+//    useJUnitPlatform()
+//    systemProperty 'jasypt.encryptor.encryptKey', findProperty("jasypt.encryptor.encryptKey")
+//}
 
 tasks.named('test') {
     useJUnitPlatform()
