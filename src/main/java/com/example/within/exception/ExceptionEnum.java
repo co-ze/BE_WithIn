@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ExceptionEnum {
 
-    USERS_DUPLICATION("중복된 username 입니다.", HttpStatus.BAD_REQUEST.value()),
+    USERS_DUPLICATION("중복된 email 입니다.", HttpStatus.BAD_REQUEST.value()),
     USER_NOT_FOUND("등록된 아이디가 존재하지 않습니다.", HttpStatus.NOT_FOUND.value()),
     INVALID_INPUT("관리자 암호를 잘못 입력하셨습니다.",HttpStatus.BAD_REQUEST.value()),
     INVALID_PASSWORD("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
