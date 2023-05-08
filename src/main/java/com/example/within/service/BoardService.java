@@ -17,10 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -39,15 +35,13 @@ public class BoardService {
         board.addUser(user);
 
         boardRepository.save(board);
-        BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글을 작성하였습니다.");
-        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "게시글을 작성하였습니다."), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<Page<Board>> getBoards(User user, Pageable pageable) {
+    public ResponseEntity<Page<BoardResponseDto>> getBoards(User user, Pageable pageable) {
         existUser(user.getEmail());
-        Page<Board> boardList = boardRepository.findAll(pageable);
+        Page<BoardResponseDto> boardList = boardRepository.selectAll(pageable);
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
@@ -68,9 +62,7 @@ public class BoardService {
         // 작성자 게시글 체크
         isBoardUser(user, board);
         board.update(boardRequestDto);
-        BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글을 수정하였습니다.");
-        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "게시글을 수정하였습니다."), HttpStatus.OK);
     }
 
     @Transactional
@@ -81,9 +73,7 @@ public class BoardService {
         // 작성자 게시글 체크
         isBoardUser(user, board);
         boardRepository.deleteById(boardId);
-        BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "게시글을 삭제하였습니다.");
-        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "게시글을 삭제하였습니다."), HttpStatus.OK);
     }
 
     private Board existBoard(Long boardId){
@@ -139,9 +129,7 @@ public class BoardService {
         }
 
         boardRepository.save(board);
-
-        basicResponseDto = new BasicResponseDto(StatusCode.OK.getStatusCode(), message);
-        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), message), HttpStatus.OK);
     }
 
     private String getEmotionString(EmotionEnum emotion) {

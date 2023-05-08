@@ -31,9 +31,7 @@ public class CommentService {
         comment.addUser(user);
 
         commentRepository.save(comment);
-        BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "댓글을 작성하였습니다.");
-        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "댓글을 작성하였습니다."), HttpStatus.OK);
     }
 
     @Transactional
@@ -44,9 +42,7 @@ public class CommentService {
         isCommentUser(user, comment);
 
         comment.update(commentRequestDto);
-        BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "댓글을 수정하였습니다.");
-        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "댓글을 수정하였습니다."), HttpStatus.OK);
     }
 
     @Transactional
@@ -57,9 +53,7 @@ public class CommentService {
         isCommentUser(user,comment);
 
         commentRepository.deleteById(commentId);
-        BasicResponseDto basicResponseDto =
-                new BasicResponseDto(StatusCode.OK.getStatusCode(), "댓글을 삭제하였습니다.");
-        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "댓글을 삭제하였습니다."), HttpStatus.OK);
     }
 
     private Board existBoard(Long boardId){
@@ -109,8 +103,7 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        basicResponseDto = new BasicResponseDto(StatusCode.OK.getStatusCode(), message);
-        return new ResponseEntity<>(basicResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), message), HttpStatus.OK);
     }
 
     private String getEmotionString(EmotionEnum emotion) {
