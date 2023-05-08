@@ -76,30 +76,6 @@ public class BoardService {
         return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "게시글을 삭제하였습니다."), HttpStatus.OK);
     }
 
-    private Board existBoard(Long boardId){
-        return boardRepository.findById(boardId).orElseThrow(
-                () -> new ErrorException(ExceptionEnum.BOARD_NOT_FOUND)
-        );
-    }
-
-    private void isUserAdmin(User user){
-        if(!user.getRole().equals(UserRoleEnum.ADMIN)) {
-            throw new ErrorException(ExceptionEnum.NOT_ALLOWED);
-        }
-    }
-
-    private void isBoardUser(User user, Board board){
-        if(!board.getUser().getEmail().equals(user.getEmail())){
-            throw new ErrorException(ExceptionEnum.NOT_ALLOWED);
-        }
-    }
-
-    public void existUser(String email){
-        userRepository.findByEmail(email).orElseThrow(
-                () -> new ErrorException(ExceptionEnum.USER_NOT_FOUND)
-        );
-    }
-
     @Transactional
     public ResponseEntity<?> SelectEmotion(Long boardId, EmotionEnum emotion, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(
@@ -138,5 +114,29 @@ public class BoardService {
             case SAD -> "슬퍼요";
             case CONGRATULATION -> "추카해요";
         };
+    }
+
+    private Board existBoard(Long boardId){
+        return boardRepository.findById(boardId).orElseThrow(
+                () -> new ErrorException(ExceptionEnum.BOARD_NOT_FOUND)
+        );
+    }
+
+    private void isUserAdmin(User user){
+        if(!user.getRole().equals(UserRoleEnum.ADMIN)) {
+            throw new ErrorException(ExceptionEnum.NOT_ALLOWED);
+        }
+    }
+
+    private void isBoardUser(User user, Board board){
+        if(!board.getUser().getEmail().equals(user.getEmail())){
+            throw new ErrorException(ExceptionEnum.NOT_ALLOWED);
+        }
+    }
+
+    public void existUser(String email){
+        userRepository.findByEmail(email).orElseThrow(
+                () -> new ErrorException(ExceptionEnum.USER_NOT_FOUND)
+        );
     }
 }
