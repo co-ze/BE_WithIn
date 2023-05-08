@@ -29,7 +29,7 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public ResponseEntity<Page<Board>> getBoards(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<Page<BoardResponseDto>> getBoards(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                  @PageableDefault(size = 3, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
         return boardService.getBoards(userDetails.getUser(),pageable);
     }

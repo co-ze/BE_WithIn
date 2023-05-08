@@ -1,8 +1,6 @@
 package com.example.within.dto;
 
-import com.example.within.entity.User;
 import com.example.within.entity.UserRoleEnum;
-import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

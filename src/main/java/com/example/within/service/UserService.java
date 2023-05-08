@@ -12,6 +12,8 @@ import com.example.within.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.imgscalr.Scalr;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -84,8 +86,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserResponseDto> getUserList(User users){
-        return userRepository.selectAllUser();
+    public Page<UserResponseDto> getUserList(User users, Pageable pageable){
+        return userRepository.selectAllUser(pageable);
     }
 
     @Transactional(readOnly = true)

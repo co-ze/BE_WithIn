@@ -41,7 +41,7 @@ public class Board extends Timestamped{
     @JsonBackReference
     private User user;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Comment> commentList = new ArrayList<>();
 
