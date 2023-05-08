@@ -7,6 +7,7 @@ import com.example.within.dto.UserResponseDto;
 import com.example.within.entity.User;
 import com.example.within.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<?> signup(@Valid @RequestBody UserRequestDto userRequestDto){
         return userService.signUp(userRequestDto);
     }
 

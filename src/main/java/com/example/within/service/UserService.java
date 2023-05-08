@@ -69,7 +69,7 @@ public class UserService {
             throw new ErrorException(ExceptionEnum.INVALID_PASSWORD);
         }
 
-        String token = jwtUtil.createToken(users.getEmail(), users.getRole());
+        String token = jwtUtil.createToken(users.getUsername(), users.getEmail(), users.getRole());
         httpServletResponse.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
         return ResponseEntity.ok(new UserStatusResponseDto(users.getUsername(), "로그인 성공"));
