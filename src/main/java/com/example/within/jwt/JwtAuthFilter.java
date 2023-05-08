@@ -1,7 +1,6 @@
 package com.example.within.jwt;
 
 import com.example.within.exception.SecurityExceptionDto;
-import com.example.within.repository.UserRepository;
 import com.example.within.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

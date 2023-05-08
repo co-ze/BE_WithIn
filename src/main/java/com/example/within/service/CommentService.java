@@ -56,24 +56,6 @@ public class CommentService {
         return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "댓글을 삭제하였습니다."), HttpStatus.OK);
     }
 
-    private Board existBoard(Long boardId){
-        return boardRepository.findById(boardId).orElseThrow(
-                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
-        );
-    }
-
-    private void isCommentUser(User user, Comment comment){
-        if(!comment.getUser().getEmail().equals(user.getEmail())){
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
-    }
-
-    private Comment existComment(Long id){
-        return commentRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("댓글이 존재하지 않습니다.")
-        );
-    }
-
     @Transactional
     public ResponseEntity<?> SelectEmotion(Long boardId, Long commentId, EmotionEnum emotion, User user) {
         Board board = existBoard(boardId);
@@ -112,6 +94,24 @@ public class CommentService {
             case SAD -> "슬퍼요";
             case CONGRATULATION -> "추카해요";
         };
+    }
+
+    private Board existBoard(Long boardId){
+        return boardRepository.findById(boardId).orElseThrow(
+                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+        );
+    }
+
+    private void isCommentUser(User user, Comment comment){
+        if(!comment.getUser().getEmail().equals(user.getEmail())){
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+    }
+
+    private Comment existComment(Long id){
+        return commentRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("댓글이 존재하지 않습니다.")
+        );
     }
 
 }

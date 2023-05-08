@@ -3,7 +3,6 @@ package com.example.within.controller;
 import com.example.within.Security.UserDetailsImpl;
 import com.example.within.dto.BoardRequestDto;
 import com.example.within.dto.BoardResponseDto;
-import com.example.within.entity.Board;
 import com.example.within.entity.EmotionEnum;
 import com.example.within.service.BoardService;
 import lombok.RequiredArgsConstructor;

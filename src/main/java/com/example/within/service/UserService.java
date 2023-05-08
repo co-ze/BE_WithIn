@@ -6,7 +6,6 @@ import com.example.within.entity.UserRoleEnum;
 import com.example.within.exception.ErrorException;
 import com.example.within.exception.ErrorResponseDto;
 import com.example.within.exception.ExceptionEnum;
-import com.example.within.repository.EmotionRepository;
 import com.example.within.repository.UserRepository;
 import com.example.within.util.FileUploadUtil;
 import com.example.within.util.JwtUtil;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
