@@ -9,13 +9,19 @@ import com.example.within.exception.ExceptionEnum;
 import com.example.within.repository.BoardRepository;
 import com.example.within.repository.EmotionRepository;
 import com.example.within.repository.UserRepository;
+import com.example.within.util.FileUploadUtil;
+import com.example.within.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.imgscalr.Scalr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +29,12 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final EmotionRepository emotionRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
-    public ResponseEntity<?> create(BoardRequestDto boardRequestDto, User user) {
+    public ResponseEntity<?> create(BoardRequestDto boardRequestDto,
+                                    User user,
+                                    MultipartFile imageFile) throws IOException{
         Board board = new Board(boardRequestDto);
 
         //ADMIN 확인
@@ -34,7 +43,12 @@ public class BoardService {
         // 유저 아이디 추가
         board.addUser(user);
 
+        if(!imageFile.isEmpty()){
+            String storedFileName = s3Uploader.upload(imageFile);
+            board.setImage(storedFileName);
+        }
         boardRepository.save(board);
+
         return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "게시글을 작성하였습니다."), HttpStatus.OK);
     }
 
@@ -139,4 +153,26 @@ public class BoardService {
                 () -> new ErrorException(ExceptionEnum.USER_NOT_FOUND)
         );
     }
+
+//    private byte[] compressBytes(byte[] bytes, float quality, int maxSizeMB) throws IOException {
+//        float compressionRatio = 1.0f;
+//        int maxSizeBytes = maxSizeMB * 1024 * 1024;
+//        while (bytes.length * compressionRatio > maxSizeBytes) {
+//            compressionRatio -= 0.05f;
+//        }
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
+//        ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+//        ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+//        ImageWriteParam writeParam = writer.getDefaultWriteParam();
+//        writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+//        writeParam.setCompressionQuality(quality * compressionRatio);
+//        writer.setOutput(ios);
+//        writer.write(null, new IIOImage(bufferedImage, null, null), writeParam);
+//        writer.dispose();
+//        ios.flush();
+//        byte[] compressedBytes = baos.toByteArray();
+//        baos.close();
+//        return compressedBytes;
+//    }
 }
