@@ -67,7 +67,6 @@ public class Board extends Timestamped{
         this.title = boardRequestDto.getTitle();
         this.contents = boardRequestDto.getContents();
         this.category = boardRequestDto.getCategory();
-        this.image = boardRequestDto.getImage();
     }
 
     public void addUser(User user){
