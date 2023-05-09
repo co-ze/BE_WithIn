@@ -49,6 +49,10 @@ dependencies {
     implementation "com.amazonaws:aws-java-sdk-s3:1.12.281"
 }
 
+test {
+    useJUnitPlatform()
+    systemProperty 'jasypt.password', findProperty("jasypt.password")
+}
 
 tasks.named('test') {
     useJUnitPlatform()
