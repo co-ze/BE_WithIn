@@ -19,6 +19,11 @@ spring:
     allow-bean-definition-overriding: true
   thymeleaf:
     cache: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
 
 jasypt:
   encryptor:
