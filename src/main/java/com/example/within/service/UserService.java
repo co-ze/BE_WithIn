@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class UserService {
             throw new ErrorException(ExceptionEnum.INVALID_PASSWORD);
         }
 
-        String token = jwtUtil.createToken(users.getUsername(), users.getEmail(), users.getRole());
+        String token = jwtUtil.createToken(users.getId(), users.getUsername(), users.getEmail(), users.getRole());
         httpServletResponse.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
         return ResponseEntity.ok(new UserStatusResponseDto(users.getUsername(), "로그인 성공"));
