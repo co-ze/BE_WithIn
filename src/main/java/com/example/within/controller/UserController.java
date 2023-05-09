@@ -38,7 +38,7 @@ public class UserController {
 
     @GetMapping("/members")
     public Page<UserResponseDto> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                             @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
+                                             @PageableDefault(size = 6, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
         return userService.getUserList(userDetails.getUser(), pageable);
     }
 
