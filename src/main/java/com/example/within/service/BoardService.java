@@ -9,10 +9,8 @@ import com.example.within.exception.ExceptionEnum;
 import com.example.within.repository.BoardRepository;
 import com.example.within.repository.EmotionRepository;
 import com.example.within.repository.UserRepository;
-import com.example.within.util.FileUploadUtil;
 import com.example.within.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
-import org.imgscalr.Scalr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -69,12 +67,19 @@ public class BoardService {
     }
 
     @Transactional
-    public ResponseEntity<?> update(Long boardId, BoardRequestDto boardRequestDto, User user) {
+    public ResponseEntity<?> update(Long boardId,
+                                    BoardRequestDto boardRequestDto,
+                                    User user,
+                                    MultipartFile imageFile) throws IOException {
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
 
         // 작성자 게시글 체크
         isBoardUser(user, board);
+        if(!imageFile.isEmpty()){
+            String storedFileName = s3Uploader.upload(imageFile);
+            board.setImage(storedFileName);
+        }
         board.update(boardRequestDto);
         return new ResponseEntity<>(BasicResponseDto.addSuccess(StatusCode.OK.getStatusCode(), "게시글을 수정하였습니다."), HttpStatus.OK);
     }
