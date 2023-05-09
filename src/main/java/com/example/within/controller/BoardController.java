@@ -26,9 +26,9 @@ public class BoardController {
     private final BoardService boardService;
 
     @ResponseBody
-    @PostMapping(value = "/boards", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createBoard(@RequestBody BoardRequestDto boardRequestDto,
-                                         @RequestParam("imageFile") MultipartFile imageFile,
+    @PostMapping(value = "/boards", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> createBoard(@RequestPart BoardRequestDto boardRequestDto,
+                                         @RequestPart("imageFile") MultipartFile imageFile,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return boardService.create(boardRequestDto, userDetails.getUser(), imageFile);
     }
@@ -45,11 +45,12 @@ public class BoardController {
         return boardService.getBoard(boardId,userDetails.getUser());
     }
 
-    @PutMapping("/boards/{boardId}")
+    @PutMapping(value = "/boards/{boardId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> updateBoard(@PathVariable Long boardId,
-                                         @RequestBody BoardRequestDto boardRequestDto,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return boardService.update(boardId, boardRequestDto, userDetails.getUser());
+                                         @RequestPart BoardRequestDto boardRequestDto,
+                                         @RequestPart("imageFile") MultipartFile imageFile,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails)throws IOException{
+        return boardService.update(boardId, boardRequestDto, userDetails.getUser(), imageFile);
     }
 
     @DeleteMapping("/boards/{boardId}")
