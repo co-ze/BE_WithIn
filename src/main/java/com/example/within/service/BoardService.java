@@ -76,7 +76,9 @@ public class BoardService {
 
         // 작성자 게시글 체크
         isBoardUser(user, board);
+
         if(!imageFile.isEmpty()){
+            s3Uploader.delete(board.getImage());
             String storedFileName = s3Uploader.upload(imageFile);
             board.setImage(storedFileName);
         }
@@ -103,7 +105,6 @@ public class BoardService {
         Emotion toEmotion = new Emotion(board, null, user, emotion);
         Emotion existingEmotion = emotionRepository.findByBoardIdAndUserIdAndEmotion(boardId, user.getId(), emotion);
 
-        BasicResponseDto basicResponseDto;
         String message;
         long emotionCnt;
 
@@ -158,26 +159,4 @@ public class BoardService {
                 () -> new ErrorException(ExceptionEnum.USER_NOT_FOUND)
         );
     }
-
-//    private byte[] compressBytes(byte[] bytes, float quality, int maxSizeMB) throws IOException {
-//        float compressionRatio = 1.0f;
-//        int maxSizeBytes = maxSizeMB * 1024 * 1024;
-//        while (bytes.length * compressionRatio > maxSizeBytes) {
-//            compressionRatio -= 0.05f;
-//        }
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
-//        ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
-//        ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
-//        ImageWriteParam writeParam = writer.getDefaultWriteParam();
-//        writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-//        writeParam.setCompressionQuality(quality * compressionRatio);
-//        writer.setOutput(ios);
-//        writer.write(null, new IIOImage(bufferedImage, null, null), writeParam);
-//        writer.dispose();
-//        ios.flush();
-//        byte[] compressedBytes = baos.toByteArray();
-//        baos.close();
-//        return compressedBytes;
-//    }
 }
