@@ -1,6 +1,6 @@
 package com.example.within.controller;
 
-import com.example.within.Security.UserDetailsImpl;
+import com.example.within.security.UserDetailsImpl;
 import com.example.within.dto.UserPageRequestDto;
 import com.example.within.dto.UserRequestDto;
 import com.example.within.dto.UserResponseDto;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class UserController {
         return userService.getUserInfo(userId, userDetails.getUser());
     }
 
-    @PutMapping("/members/{userId}")
+    @PutMapping(value = "/members/{userId}", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> updateUserInfo(@PathVariable Long userId, @RequestBody UserPageRequestDto userPageRequestDto, @RequestParam("imageFile") MultipartFile imageFile, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
          return userService.updateUserInfo(userId, userPageRequestDto, userDetails.getUser(), imageFile);
     }

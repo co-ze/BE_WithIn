@@ -1,6 +1,6 @@
 package com.example.within.controller;
 
-import com.example.within.Security.UserDetailsImpl;
+import com.example.within.security.UserDetailsImpl;
 import com.example.within.dto.BoardRequestDto;
 import com.example.within.dto.BoardResponseDto;
 import com.example.within.entity.EmotionEnum;
@@ -10,9 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @RestController
@@ -21,10 +25,12 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     private final BoardService boardService;
 
-    @PostMapping("/boards")
+    @ResponseBody
+    @PostMapping(value = "/boards", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createBoard(@RequestBody BoardRequestDto boardRequestDto,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return boardService.create(boardRequestDto, userDetails.getUser());
+                                         @RequestParam("imageFile") MultipartFile imageFile,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        return boardService.create(boardRequestDto, userDetails.getUser(), imageFile);
     }
 
     @GetMapping("/boards")

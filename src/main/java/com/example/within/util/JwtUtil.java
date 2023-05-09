@@ -1,6 +1,6 @@
 package com.example.within.util;
 
-import com.example.within.Security.UserDetailsServiceImpl;
+import com.example.within.security.UserDetailsServiceImpl;
 import com.example.within.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

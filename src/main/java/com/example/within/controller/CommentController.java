@@ -1,6 +1,6 @@
 package com.example.within.controller;
 
-import com.example.within.Security.UserDetailsImpl;
+import com.example.within.security.UserDetailsImpl;
 import com.example.within.dto.CommentRequestDto;
 import com.example.within.entity.EmotionEnum;
 import com.example.within.service.CommentService;

@@ -2,33 +2,37 @@ server:
   port: 4000
 
 spring:
-  h2:
-    console:
-      enabled: true
   datasource:
-    url: jdbc:h2:mem:test;MODE=MYSQL
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://within.c3grlrpemhnc.ap-northeast-2.rds.amazonaws.com:3306/within?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ENC(u5am2fuRwieORU7VgGKzsg==)
+    password: ENC(VjXihdWW/fojEaVHW9Awe0bLRKCNzxB/)
+  devtools:
+    livereload:
+      enabled: true
   jpa:
     properties:
       hibernate:
         show_sql: true
         format_sql: true
     open-in-view: true
+    hibernate:
+      ddl-auto: update
   main:
     allow-bean-definition-overriding: true
   thymeleaf:
     cache: false
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
-
-
-jasypt:
-  encryptor:
-    algorithm: PBEWithMD5AndDES
-    password: withinbest
+cloud:
+  aws:
+    s3:
+      bucket: within-s3-bucket
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: ENC(95y+rkrEgtAsn683V2wv2LvqRMdtpyHtmFP1h4qF6hw=)
+      secret-key: ENC(ZeMg/1AcUGwuLO2d25pKQHA24xvfQJ/TvwDgRAN+WcZnXIRo/zZPDJl+NuvimBihZPCVpDa+M+w=)
 
 jwt:
   secret:

@@ -5,7 +5,6 @@ import com.example.within.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,12 +23,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableMethodSecurity // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
-//    private static final String[] AUTH_WHITELIST = {
-//            "/within/signup",
-//            "/within/login",
-//            "/swagger-ui/**",
-//            "/v3/api-docs/**"
-//    };
 
     private final JwtAuthFilter jwtAuthFilter;
 
@@ -51,19 +44,6 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated();
         httpSecurity.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
-//        http.csrf().disable();
-//        http.cors();
-//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        http.authorizeHttpRequests(authorize -> authorize
-//                .shouldFilterAllDispatcherTypes(false)
-//                .requestMatchers(AUTH_WHITELIST)
-//                .permitAll()
-//                .anyRequest()
-//                .authenticated())
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
     }
 
     // 이 설정을 해주면, 우리가 설정한대로 CorsFilter가 Security의 filter에 추가되어

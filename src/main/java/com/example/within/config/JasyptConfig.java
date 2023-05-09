@@ -16,7 +16,7 @@ public class JasyptConfig {
     private String encryptKey;
 
     @Bean("jasyptStringEncryptor")
-    public StringEncryptor stringEncryptor(){
+    public StringEncryptor stringEncryptor() {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword(encryptKey);
@@ -30,14 +30,4 @@ public class JasyptConfig {
         encryptor.setConfig(config);
         return encryptor;
     }
-
-//    @Autowired
-//    @Qualifier("jasyptStringEncryptor")
-//    private StringEncryptor encryptor;
-//
-//    public void decryptJwtSecretKey() {
-//        String encryptedKey = "XrlocOAEi5gbjlTI3IEGWD/c7WcPvWnATDXVh3T5echxbUGUl2TvOyf2KDzvlKBotMXKS1IxIKBwOZ+5SgllaE4mnmrA2Iakfp4+ABhALqNzBigTzAZ7zJ9OHV3dOAxbgiS2jM9YXYFX6JtBpEW7mft7C6xBKnFfvi61uBca+MM=";
-//        String decryptedKey = encryptor.decrypt(encryptedKey);
-//        System.out.println("Decrypted JWT Secret Key: " + decryptedKey);
-//    }
 }

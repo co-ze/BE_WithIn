@@ -24,7 +24,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -45,16 +45,10 @@ dependencies {
 
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation "com.amazonaws:aws-java-sdk-s3:1.12.281"
 }
 
-//bootRun {
-//    args = ["--jasypt.encryptor.encryptKey=testkey"]
-//}
-//
-//test {
-//    useJUnitPlatform()
-//    systemProperty 'jasypt.encryptor.encryptKey', findProperty("jasypt.encryptor.encryptKey")
-//}
 
 tasks.named('test') {
     useJUnitPlatform()
