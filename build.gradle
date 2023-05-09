@@ -44,14 +44,6 @@ dependencies {
 
 }
 
-//bootRun {
-//    args = ["--jasypt.encryptor.encryptKey=testkey"]
-//}
-//
-//test {
-//    useJUnitPlatform()
-//    systemProperty 'jasypt.encryptor.encryptKey', findProperty("jasypt.encryptor.encryptKey")
-//}
 
 tasks.named('test') {
     useJUnitPlatform()
