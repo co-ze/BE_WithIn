@@ -1,5 +1,7 @@
 package com.example.within.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.within.dto.*;
 import com.example.within.entity.User;
 import com.example.within.entity.UserRoleEnum;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.IIOImage;
@@ -34,12 +37,16 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
+
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private AmazonS3 amazonS3Client;
+
 
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
@@ -112,9 +119,7 @@ public class UserService {
     public ResponseEntity<?> updateUserInfo(Long userId,
                                             UserPageRequestDto userPageRequestDto,
                                             User user,
-                                            @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        // MultipartFile imageFile input으로 사용
-
+                                            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
         // userId로 업데이트할 User 개체를 db에서 가져옴
         User userUpdate = userRepository.findById(userId)
                 .orElseThrow(() -> new ErrorException(ExceptionEnum.USER_NOT_FOUND));
@@ -124,33 +129,40 @@ public class UserService {
             throw new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
         }
 
-        //User 클래스의 username 속석을 userPageRequestDto의 username값으로 설정
+        //User 클래스의 username 속성을 userPageRequestDto의 username값으로 설정
         userUpdate.setUsername(userPageRequestDto.getUsername());
 
-        // Resize and compress the image file
-        BufferedImage bufferedImage = ImageIO.read(imageFile.getInputStream());
-        BufferedImage resizedImage = Scalr.resize(bufferedImage, 300);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(resizedImage, "jpg", baos);
-        baos.flush();
-        byte[] compressedBytes = compressBytes(baos.toByteArray(), 0.7f, 3); // compress the image to have a file size of up to 3MB with 70% compression quality
-        baos.close();
+        if (imageFile != null) {
+            // Resize and compress the image file
+            BufferedImage bufferedImage = ImageIO.read(imageFile.getInputStream());
+            BufferedImage resizedImage = Scalr.resize(bufferedImage, 300);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(resizedImage, "png", baos);
+            baos.flush();
+            byte[] compressedBytes = compressBytes(baos.toByteArray(), 0.7f, 3); // compress the image to have a file size of up to 3MB with 70% compression quality
+            baos.close();
 
-        // Save the image file to disk
-        String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-        String fileExtension = StringUtils.getFilenameExtension(fileName); // StringUtils 클래스를 다시 사용하여서 정리된 파일 이름에서 파일 확장자 추출
-        String newFileName = UUID.randomUUID() + "." + fileExtension; // 업로드된 파일에 대한 고유한 새 파일 이름 생성. 임의의 UUID 생성 후 끝에 fileExtension 추가
-        String uploadDir = "./user-images/"; // directory 설정
-        FileUploadUtil.saveFile(uploadDir, newFileName, imageFile); //파일 저장
+            // Upload the compressed image to Amazon S3
+            String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+            String fileExtension = StringUtils.getFilenameExtension(fileName);
+            String newFileName = UUID.randomUUID() + "." + fileExtension;
+            String bucketName = "within-s3-bucket";
+            String s3Key = "user-images/" + newFileName;
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(compressedBytes.length);
+            metadata.setContentType("image/png");
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(compressedBytes);
+            amazonS3Client.putObject(bucketName, s3Key, inputStream, metadata);
 
-        // Set the user's image path to the newly uploaded file name
-        userUpdate.setImg(newFileName);
-        userUpdate.setUsername(userPageRequestDto.getUsername());
+            // Set the user's image path to the newly uploaded file name
+            userUpdate.setImg(s3Key);
+        }
+
+        // Save the updated user to the repository
         userRepository.save(userUpdate);
 
         // Return the updated user object
         return ResponseEntity.ok(userUpdate);
-        // StringUtils 클래스를 사용하여 업로드 된 파일의 파일 이름을 정리 및 불필요한 문자나 피알 경로 정보 제거
     }
     private byte[] compressBytes(byte[] bytes, float quality, int maxSizeMB) throws IOException {
         float compressionRatio = 1.0f;
