@@ -3,26 +3,31 @@ package com.example.within.dto;
 import com.example.within.entity.Board;
 import jakarta.persistence.OrderBy;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 public class BoardResponseDto {
-    private final Long boardId;
-    private final String title;
-    private final String contents;
-    private final String image;
-    private final LocalDateTime createdTime;
-    private final String category;
-    private final Long likeCnt;
-    private final Long sadCnt;
-    private final Long congratulationCnt;
+    private Long boardId;
+    private String title;
+    private String contents;
+    private String image;
+    private LocalDateTime createdTime;
+    private String category;
+    private Long likeCnt;
+    private Long sadCnt;
+    private Long congratulationCnt;
+    private boolean likeCheck = false;
+    private boolean sadCheck = false;
+    private boolean congratulationCheck = false;
     @OrderBy("createdAt DESC")
     private List<CommentResponseDto> comment;
 
-    public BoardResponseDto(Board board){
+    public BoardResponseDto(Board board, List<CommentResponseDto> commentResponseDtoList){
         this.boardId = board.getId();
         this.title = board.getTitle();
         this.contents =  board.getContents();
@@ -32,9 +37,6 @@ public class BoardResponseDto {
         this.likeCnt = board.getLikeCnt();
         this.sadCnt = board.getSadCnt();
         this.congratulationCnt = board.getCongratulationCnt();
-        this.comment = board.getCommentList()
-                .stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
+        this.comment = commentResponseDtoList;
     }
 }
