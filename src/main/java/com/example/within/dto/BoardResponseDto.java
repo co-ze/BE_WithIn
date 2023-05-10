@@ -1,5 +1,14 @@
 package com.example.within.dto;
 
+import com.example.within.entity.Board;
+import jakarta.persistence.OrderBy;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 public class BoardResponseDto {
@@ -18,10 +27,10 @@ public class BoardResponseDto {
     @OrderBy("createdAt DESC")
     private List<CommentResponseDto> commentResponseDtoList;
 
-    public BoardResponseDto(Board board, List<CommentResponseDto> commentResponseDtoList){
+    public BoardResponseDto(Board board) {
         this.boardId = board.getId();
         this.title = board.getTitle();
-        this.contents =  board.getContents();
+        this.contents = board.getContents();
         this.image = board.getImage();
         this.createdTime = board.getCreatedAt();
         this.category = board.getCategory();
