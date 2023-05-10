@@ -1,8 +1,16 @@
 package com.example.within.dto;
 
+import com.example.within.entity.Board;
+import jakarta.persistence.OrderBy;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @Setter
-public class BoardResponseDto {
+public class BoardDetailResponseDto {
     private Long boardId;
     private String title;
     private String contents;
@@ -16,9 +24,9 @@ public class BoardResponseDto {
     private boolean sadCheck = false;
     private boolean congratulationCheck = false;
     @OrderBy("createdAt DESC")
-    private List<CommentResponseDto> commentResponseDtoList;
+    private List<CommentDetailResponseDto> commentDetailResponseDtoList;
 
-    public BoardResponseDto(Board board, List<CommentResponseDto> commentResponseDtoList){
+    public BoardDetailResponseDto(Board board, List<CommentDetailResponseDto> commentDetailResponseDtoList){
         this.boardId = board.getId();
         this.title = board.getTitle();
         this.contents =  board.getContents();
@@ -28,9 +36,6 @@ public class BoardResponseDto {
         this.likeCnt = board.getLikeCnt();
         this.sadCnt = board.getSadCnt();
         this.congratulationCnt = board.getCongratulationCnt();
-        this.commentResponseDtoList = board.getCommentList()
-                .stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
+        this.commentDetailResponseDtoList = commentDetailResponseDtoList;
     }
 }
