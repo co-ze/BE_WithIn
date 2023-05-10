@@ -110,7 +110,7 @@ public class CommentService {
 
     private Comment existComment(Long id){
         return commentRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("댓글이 존재하지 않습니다.")
+                () -> new ErrorException(ExceptionEnum.COMMENT_NOT_FOUND)
         );
     }
 
