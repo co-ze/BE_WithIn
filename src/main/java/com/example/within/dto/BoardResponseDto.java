@@ -1,6 +1,7 @@
 package com.example.within.dto;
 
 import com.example.within.entity.Board;
+import jakarta.persistence.OrderBy;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class BoardResponseDto {
     private final Long likeCnt;
     private final Long sadCnt;
     private final Long congratulationCnt;
+    @OrderBy("createdAt DESC")
     private List<CommentResponseDto> comment;
 
     public BoardResponseDto(Board board){
@@ -30,6 +32,9 @@ public class BoardResponseDto {
         this.likeCnt = board.getLikeCnt();
         this.sadCnt = board.getSadCnt();
         this.congratulationCnt = board.getCongratulationCnt();
-        this.comment = board.getCommentList().stream().map(CommentResponseDto::new).collect(Collectors.toList());
+        this.comment = board.getCommentList()
+                .stream()
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
