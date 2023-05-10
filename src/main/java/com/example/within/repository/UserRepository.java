@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
-    @Query("select new com.example.within.dto.UserResponseDto(u.id, u.username, u.email) from User u")
+    @Query("select new com.example.within.dto.UserResponseDto(u.id, u.username, u.email, u.img) from User u")
     Page<UserResponseDto> selectAllUser(Pageable pageable);
 
     @Query("select new com.example.within.dto.UserPageResponseDto(u.username, u.role, u.email, u.img) from User u where u.id = :userId")
