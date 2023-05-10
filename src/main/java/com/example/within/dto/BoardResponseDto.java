@@ -12,6 +12,7 @@ public class BoardResponseDto {
     private final Long boardId;
     private final String title;
     private final String contents;
+    private final String image;
     private final LocalDateTime createdTime;
     private final String category;
     private final Long likeCnt;
@@ -23,6 +24,7 @@ public class BoardResponseDto {
         this.boardId = board.getId();
         this.title = board.getTitle();
         this.contents =  board.getContents();
+        this.image = board.getImage();
         this.createdTime = board.getCreatedAt();
         this.category = board.getCategory();
         this.likeCnt = board.getLikeCnt();

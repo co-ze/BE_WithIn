@@ -25,7 +25,6 @@ import java.io.IOException;
 public class BoardController {
     private final BoardService boardService;
 
-    @ResponseBody
     @PostMapping(value = "/boards", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> createBoard(@RequestPart BoardRequestDto boardRequestDto,
                                          @RequestPart("imageFile") MultipartFile imageFile,
