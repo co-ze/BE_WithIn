@@ -22,7 +22,9 @@ public class S3Uploader {
 
     public String upload(MultipartFile multipartFile) throws IOException {
         String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
-
+        if (!fileName.toLowerCase().endsWith(".jpg")) {
+            fileName += ".jpg";
+        }
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(multipartFile.getSize());
         amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), objMeta);
