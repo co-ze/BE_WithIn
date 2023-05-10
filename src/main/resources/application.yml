@@ -1,7 +1,9 @@
 server:
-  port: 4000
+  port: 5000
 
 spring:
+  profiles:
+    include: secret
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://within.c3grlrpemhnc.ap-northeast-2.rds.amazonaws.com:3306/within?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -34,12 +36,10 @@ cloud:
       access-key: ENC(95y+rkrEgtAsn683V2wv2LvqRMdtpyHtmFP1h4qF6hw=)
       secret-key: ENC(ZeMg/1AcUGwuLO2d25pKQHA24xvfQJ/TvwDgRAN+WcZnXIRo/zZPDJl+NuvimBihZPCVpDa+M+w=)
 
+
 jwt:
   secret:
     key: ENC(XrlocOAEi5gbjlTI3IEGWD/c7WcPvWnATDXVh3T5echxbUGUl2TvOyf2KDzvlKBotMXKS1IxIKBwOZ+5SgllaE4mnmrA2Iakfp4+ABhALqNzBigTzAZ7zJ9OHV3dOAxbgiS2jM9YXYFX6JtBpEW7mft7C6xBKnFfvi61uBca+MM=)
 
 
     #7ZWt7ZW0OTntmZTsnbTtjIXtlZzqta3snYTrhIjrqLjshLjqs4TroZzrgpjslYTqsIDsnpDtm4zrpa3tlZzqsJzrsJzsnpDrpbzrp4zrk6TslrTqsIDsnpA=
-
-
-

@@ -28,6 +28,11 @@
 ---------------------------------------
 [위드인 RESTful API](https://www.notion.so/e53a1e5449bb4d6a93906deb76daec25?v=4060b89fa3e8491ba16a7421148e5b9d)
 
+👨‍💻 Use Case
+---------------------------------------
+![WithIn Use Case](https://user-images.githubusercontent.com/128972031/236847024-964ad7dd-45ce-4fc8-91f7-b2c3e9740a95.PNG)
+
+
 🗝 ERD 
 ---------------------------------------
 ![Untitled](https://user-images.githubusercontent.com/128972031/236445827-d5319083-6066-4d96-b21d-1630bd98038f.png)

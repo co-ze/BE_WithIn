@@ -25,7 +25,6 @@ import java.io.IOException;
 public class BoardController {
     private final BoardService boardService;
 
-    @ResponseBody
     @PostMapping(value = "/boards", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> createBoard(@RequestPart BoardRequestDto boardRequestDto,
                                          @RequestPart("imageFile") MultipartFile imageFile,
@@ -35,7 +34,7 @@ public class BoardController {
 
     @GetMapping("/boards")
     public ResponseEntity<Page<BoardResponseDto>> getBoards(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                 @PageableDefault(size = 3, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
+                                                 @PageableDefault(size = 6, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
         return boardService.getBoards(userDetails.getUser(),pageable);
     }
 
