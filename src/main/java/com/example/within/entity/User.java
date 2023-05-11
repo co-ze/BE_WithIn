@@ -23,9 +23,9 @@ public class User {
     @Column(nullable = false)
     private String username;
 
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     @Lob
-    private String img = "C:/Users/82109/study/BE_WithIn/src/main/resources/images/8326a7a4d1178e43e7ea66aa4e.jpg";
+    private String img;
 
     @Column(nullable = false, unique = true)
     private String email;

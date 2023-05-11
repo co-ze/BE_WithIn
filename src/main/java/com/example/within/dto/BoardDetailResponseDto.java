@@ -7,11 +7,10 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class BoardResponseDto {
+public class BoardDetailResponseDto {
     private Long boardId;
     private String title;
     private String contents;
@@ -25,21 +24,18 @@ public class BoardResponseDto {
     private boolean sadCheck = false;
     private boolean congratulationCheck = false;
     @OrderBy("createdAt DESC")
-    private List<CommentResponseDto> commentResponseDtoList;
+    private List<CommentDetailResponseDto> commentDetailResponseDtoList;
 
-    public BoardResponseDto(Board board) {
+    public BoardDetailResponseDto(Board board, List<CommentDetailResponseDto> commentDetailResponseDtoList){
         this.boardId = board.getId();
         this.title = board.getTitle();
-        this.contents = board.getContents();
+        this.contents =  board.getContents();
         this.image = board.getImage();
         this.createdTime = board.getCreatedAt();
         this.category = board.getCategory();
         this.likeCnt = board.getLikeCnt();
         this.sadCnt = board.getSadCnt();
         this.congratulationCnt = board.getCongratulationCnt();
-        this.commentResponseDtoList = board.getCommentList()
-                .stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
+        this.commentDetailResponseDtoList = commentDetailResponseDtoList;
     }
 }

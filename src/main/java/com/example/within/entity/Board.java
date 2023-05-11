@@ -31,7 +31,7 @@ public class Board extends Timestamped{
     @Column(nullable = false)
     private String category;
 
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     @Lob
     private String image;
 

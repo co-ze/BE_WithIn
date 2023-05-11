@@ -1,8 +1,6 @@
 package com.example.within.service;
 
-import com.example.within.dto.BasicResponseDto;
-import com.example.within.dto.BoardRequestDto;
-import com.example.within.dto.BoardResponseDto;
+import com.example.within.dto.*;
 import com.example.within.entity.*;
 import com.example.within.exception.ErrorException;
 import com.example.within.exception.ExceptionEnum;
@@ -20,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -62,8 +62,28 @@ public class BoardService {
         existUser(user.getEmail());
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
-        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
-        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+        List<CommentDetailResponseDto> commentDetailResponseDtoList = new ArrayList<>();
+
+        for(Comment comment : board.getCommentList()){
+            CommentDetailResponseDto commentDetailResponseDto = new CommentDetailResponseDto(comment);
+            if(emotionRepository.findCommentEmotionWhoCheck(comment.getId(), EmotionEnum.LIKE, user.getId()))
+                commentDetailResponseDto.setLikeCheck(true);
+            if(emotionRepository.findCommentEmotionWhoCheck(comment.getId(), EmotionEnum.SAD, user.getId()))
+                commentDetailResponseDto.setSadCheck(true);
+            if(emotionRepository.findCommentEmotionWhoCheck(comment.getId(), EmotionEnum.CONGRATULATION, user.getId()))
+                commentDetailResponseDto.setCongratulationCheck(true);
+            commentDetailResponseDtoList.add(commentDetailResponseDto);
+        }
+        BoardDetailResponseDto boardDetailResponseDto = new BoardDetailResponseDto(board, commentDetailResponseDtoList);
+
+        if(emotionRepository.findBoardEmotionWhoCheck(boardId, EmotionEnum.LIKE, user.getId()))
+            boardDetailResponseDto.setLikeCheck(true);
+        if(emotionRepository.findBoardEmotionWhoCheck(boardId, EmotionEnum.SAD, user.getId()))
+            boardDetailResponseDto.setSadCheck(true);
+        if(emotionRepository.findBoardEmotionWhoCheck(boardId, EmotionEnum.CONGRATULATION, user.getId()))
+            boardDetailResponseDto.setCongratulationCheck(true);
+
+        return new ResponseEntity<>(boardDetailResponseDto, HttpStatus.OK);
     }
 
     @Transactional

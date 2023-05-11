@@ -1,8 +1,8 @@
 package com.example.within.controller;
 
+import com.example.within.dto.BoardResponseDto;
 import com.example.within.security.UserDetailsImpl;
 import com.example.within.dto.BoardRequestDto;
-import com.example.within.dto.BoardResponseDto;
 import com.example.within.entity.EmotionEnum;
 import com.example.within.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,14 @@ public class BoardController {
 
     @PostMapping(value = "/boards", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> createBoard(@RequestPart BoardRequestDto boardRequestDto,
-                                         @RequestPart("imageFile") MultipartFile imageFile,
+                                         @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return boardService.create(boardRequestDto, userDetails.getUser(), imageFile);
     }
 
     @GetMapping("/boards")
     public ResponseEntity<Page<BoardResponseDto>> getBoards(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                 @PageableDefault(size = 6, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
+                                                            @PageableDefault(size = 6, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
         return boardService.getBoards(userDetails.getUser(),pageable);
     }
 
@@ -47,7 +47,7 @@ public class BoardController {
     @PutMapping(value = "/boards/{boardId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> updateBoard(@PathVariable Long boardId,
                                          @RequestPart BoardRequestDto boardRequestDto,
-                                         @RequestPart("imageFile") MultipartFile imageFile,
+                                         @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails)throws IOException{
         return boardService.update(boardId, boardRequestDto, userDetails.getUser(), imageFile);
     }

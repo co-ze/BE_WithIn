@@ -3,6 +3,8 @@ package com.example.within.service;
 import com.example.within.dto.BasicResponseDto;
 import com.example.within.dto.CommentRequestDto;
 import com.example.within.entity.*;
+import com.example.within.exception.ErrorException;
+import com.example.within.exception.ExceptionEnum;
 import com.example.within.repository.BoardRepository;
 import com.example.within.repository.CommentRepository;
 import com.example.within.repository.EmotionRepository;
@@ -11,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -98,19 +98,19 @@ public class CommentService {
 
     private Board existBoard(Long boardId){
         return boardRepository.findById(boardId).orElseThrow(
-                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
+                () -> new ErrorException(ExceptionEnum.BOARD_NOT_FOUND)
         );
     }
 
     private void isCommentUser(User user, Comment comment){
         if(!comment.getUser().getEmail().equals(user.getEmail())){
-            throw new IllegalArgumentException("권한이 없습니다.");
+            throw new ErrorException(ExceptionEnum.NOT_ALLOWED);
         }
     }
 
     private Comment existComment(Long id){
         return commentRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("댓글이 존재하지 않습니다.")
+                () -> new ErrorException(ExceptionEnum.COMMENT_NOT_FOUND)
         );
     }
 
