@@ -1,7 +1,7 @@
 package com.example.within.dto;
 
 import com.example.within.entity.Board;
-import jakarta.persistence.OrderBy;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +14,7 @@ public class BoardDetailResponseDto {
     private Long boardId;
     private String title;
     private String contents;
+    private Long userId;
     private String image;
     private LocalDateTime createdTime;
     private String category;
@@ -23,13 +24,13 @@ public class BoardDetailResponseDto {
     private boolean likeCheck = false;
     private boolean sadCheck = false;
     private boolean congratulationCheck = false;
-    @OrderBy("createdAt DESC")
     private List<CommentDetailResponseDto> commentDetailResponseDtoList;
 
     public BoardDetailResponseDto(Board board, List<CommentDetailResponseDto> commentDetailResponseDtoList){
         this.boardId = board.getId();
         this.title = board.getTitle();
         this.contents =  board.getContents();
+        this.userId = board.getUser().getId();
         this.image = board.getImage();
         this.createdTime = board.getCreatedAt();
         this.category = board.getCategory();
