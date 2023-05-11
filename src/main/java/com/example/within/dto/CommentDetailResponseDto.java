@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class CommentDetailResponseDto {
     private Long commentId;
     private String comment;
+    private String img;
     private String username;
     private LocalDateTime createdAt;
     private Long likeCnt;
@@ -26,6 +27,7 @@ public class CommentDetailResponseDto {
     public CommentDetailResponseDto(Comment comment){
         this.commentId = comment.getId();
         this.comment = comment.getComment();
+        this.img = comment.getUser().getImg();
         this.username = comment.getUser().getUsername();
         this.createdAt = comment.getCreatedAt();
         this.likeCnt = comment.getLikeCnt();
