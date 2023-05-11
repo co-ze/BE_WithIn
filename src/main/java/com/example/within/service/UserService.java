@@ -86,15 +86,10 @@ public class UserService {
         User userNow = userRepository.findById(userId).orElseThrow(
                 () -> new ErrorException(ExceptionEnum.USER_NOT_FOUND)
         );
-
-        if (StringUtils.pathEquals(users.getEmail(), userNow.getEmail())) {
-            Optional<UserPageResponseDto> optionalUser = userRepository.selectUser(userId);
+        Optional<UserPageResponseDto> optionalUser = userRepository.selectUser(userId);
 //            UserRoleEnum userRoleEnum = users.getRole();
-            if (optionalUser.isPresent()) {
-                return ResponseEntity.ok(optionalUser);
-            } else {
-                throw new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
-            }
+        if (optionalUser.isPresent()) {
+            return ResponseEntity.ok(optionalUser);
         } else {
             throw new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
         }
