@@ -63,7 +63,6 @@ public class BoardService {
         // 게시글 존재여부 확인
         Board board = existBoard(boardId);
         List<CommentDetailResponseDto> commentDetailResponseDtoList = new ArrayList<>();
-
         for(Comment comment : board.getCommentList()){
             CommentDetailResponseDto commentDetailResponseDto = new CommentDetailResponseDto(comment);
             if(emotionRepository.findCommentEmotionWhoCheck(comment.getId(), EmotionEnum.LIKE, user.getId()))
@@ -74,8 +73,9 @@ public class BoardService {
                 commentDetailResponseDto.setCongratulationCheck(true);
             commentDetailResponseDtoList.add(commentDetailResponseDto);
         }
-        BoardDetailResponseDto boardDetailResponseDto = new BoardDetailResponseDto(board, commentDetailResponseDtoList);
+        commentDetailResponseDtoList.sort((c1, c2) -> c2.getCreatedAt().compareTo(c1.getCreatedAt()));
 
+        BoardDetailResponseDto boardDetailResponseDto = new BoardDetailResponseDto(board, commentDetailResponseDtoList);
         if(emotionRepository.findBoardEmotionWhoCheck(boardId, EmotionEnum.LIKE, user.getId()))
             boardDetailResponseDto.setLikeCheck(true);
         if(emotionRepository.findBoardEmotionWhoCheck(boardId, EmotionEnum.SAD, user.getId()))
